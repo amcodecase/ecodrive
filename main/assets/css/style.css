@@ -1,0 +1,160 @@
+:root {
+    --primary-color: #007bff; /* Primary color (blue) */
+    --secondary-color: #6c757d; /* Secondary color (gray) */
+    --success-color: #28a745; /* Success color (green) */
+    --warning-color: #ffc107; /* Warning color (yellow) */
+    --danger-color: #dc3545; /* Danger color (red) */
+    --light-color: #f8f9fa; /* Light background color */
+    --dark-color: #343a40; /* Dark text color */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light gray background */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+
+}
+
+
+.navbar {
+    background: linear-gradient(to right, #0062cc, #00bfff); /* Attractive gradient from dark blue to light blue */
+}
+.navbar-brand {
+    display: flex;
+    align-items: center; /* Align logo and text */
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white; /* Make the site name white */
+    transition: color 0.3s ease; /* Add smooth hover transition */
+}
+
+.navbar-brand img {
+    margin-right: 10px; /* Add space between logo and site name */
+}
+
+.navbar-brand:hover {
+    color: #cfe9ff; /* Gold color on hover */
+}
+
+.navbar-nav .nav-link {
+    color: white; /* All links are white */
+    padding: 10px 15px; /* Padding for links */
+    transition: color 0.3s ease; /* Smooth color transition */
+    text-decoration: none; /* Remove underline */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff; /* Gold color on hover */
+    font-weight: 600; /* Slightly bolder text on hover */
+    background: rgba(0, 255, 213, 0.2); /* Light gold background on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.navbar-toggler {
+    border-color: white; /* White border for the toggler */
+}
+
+.navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="white" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E'); /* White toggler icon */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        background: linear-gradient(to bottom, #0062cc, #00bfff); /* Match mobile navbar background */
+    }
+}
+
+.dashboard-container {
+    border: 1px solid #fff;
+
+    margin-left: 250px; /* Align with sidebar width */
+    margin-top: 2rem; /* Space from the top */
+}
+
+.card {
+    border-radius: 0.5rem; /* Rounded corners for the card */
+    border: none; /* Remove default border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    margin-bottom: 1.5rem; /* Space between cards */
+    width: 280px; /* Set a fixed width for each card */
+    max-width: 100%; /* Ensure responsiveness */
+}
+
+.card-header {
+    background-color: var(--primary-color); /* Primary color for the header */
+    color: white; /* White text for header */
+    padding: 1rem; /* Padding for the header */
+    border-top-left-radius: 0.5rem; /* Round top left corners */
+    border-top-right-radius: 0.5rem; /* Round top right corners */
+}
+
+.card-title {
+    font-size: 1.5rem; /* Increase font size for the title */
+    font-weight: 600; /* Bold font for the title */
+    margin: 0; /* Remove default margin */
+}
+
+.card-body {
+    padding: 1rem; /* Padding for card body */
+    background-color: #f8f9fa; /* Light background color for body */
+}
+
+.card-text {
+    color: var(--dark-color); /* Dark text color for card content */
+    font-size: 1rem; /* Font size for card text */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+/* Optional: Add hover effect for the cards */
+.card:hover {
+    cursor: pointer;
+    transform: translateY(-2px); /* Slightly lift the card on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+.chart-container {
+    position: relative;
+    height: 300px; /* Set a fixed height */
+    width: 80%; /* Adjust the width */
+    margin: auto; /* Center the chart */
+}
+
+.sidebar {
+    padding: 1rem;
+    border: 1px 1px 1px 1px solid #fff;
+}
+
+.sidebar .nav-link {
+    margin: 5px;
+    color: #333; /* Default text color */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef; /* Highlight on hover */
+    color: #007bff; /* Change text color on hover */
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff; /* Active link color */
+    color: white; /* Active link text color */
+}
+
+
+.footer {
+    padding: 1rem 0;
+    background-color: #ffffff; /* Light background color */
+}
+
+.footer a {
+    text-decoration: none; /* Remove underline from links */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.social-icons {
+    font-size: 1.5rem; /* Adjust size of social icons */
+}

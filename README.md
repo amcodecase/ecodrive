@@ -29,8 +29,20 @@ Ecodrive is a digital toll gate collection system that automates fee deductions 
 - **Frontend**: HTML5, CSS3, Bootstrap
 - **Backend**: PHP (with REST APIs)
 - **SMS Integration**: Third-party SMS API
-- **Mobile Money Integration**: Airtel Money, MTN MoMo
+- **Email Integration**: Third-party Email API
+- **Mobile Money Integration**: Airtel Money, MTN MoMo, Zamtel Kwacha
 - **License Plate Recognition**: Optical Character Recognition (OCR) system
+
+## Developers
+
+- **Michelo M Justus**: Lead Developer
+- **Sianamate Samuel**: Backend Developer
+- **Kalonde Emmanuel**: Backend Developer
+- **Chishala Backstone**: Database Specialist
+- **Sautu Steven**: Frontend Developer
+- **Syabunkulu Christabel**: Frontend Developer
+- **Nampemba Mirriam**: Email, SMS, and Mobile Money Integration Specialist
+- **Kalusa Natasha**: Email, SMS, and Mobile Money Integration Specialist
 
 ## Installation
 

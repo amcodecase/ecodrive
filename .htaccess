@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Remove .php extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]+)/?$ $1.php [L,QSA]
+
+# Optional: Redirect .php URLs to their non-.php versions
+RewriteCond %{THE_REQUEST} \s([^.]+)\.php[?\s] [NC]
+RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+
+# Custom 404 Error Page
+ErrorDocument 404 /404.php
