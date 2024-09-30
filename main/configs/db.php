@@ -2,8 +2,8 @@
 // Database configuration
 $host = 'localhost'; // Change to your database host
 $db   = 'ecodrive'; // Change to your database name
-$user = 'main'; // Change to your database username
-$pass = 'main'; // Change to your database password
+$user = 'smith'; // Change to your database username
+$pass = 'Amos1an@!'; // Change to your database password
 $charset = 'utf8mb4';
 
 // Set up the Data Source Name (DSN)
