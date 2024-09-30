@@ -82,7 +82,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         background-color: #f8f9fa;
         margin: 0;
         padding: 0;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        position: relative; /* Required for positioning pseudo-element */
+        overflow: hidden; /* Prevent scrollbars from appearing */
     }
+    body::before {
+    content: ""; /* Creates an empty pseudo-element */
+    position: fixed; /* Fixed positioning for the background */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('assets/img/bg.jpg'); /* Background image path */
+    background-size: cover; /* Cover the whole viewport */
+    background-position: center; /* Center the background image */
+    filter: blur(8px); /* Blur effect on the background */
+    z-index: 0; /* Behind all other content */
+}
     .container {
         width: 300px; /* Narrower width */
         margin-top: 5rem;
@@ -90,6 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         padding: 2rem; /* Padding for inner spacing */
         border-radius: 0.5rem; /* Rounded corners */
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        position: relative; /* Position relative for layering */
+        width: 300px; /* Narrower width */
+        margin-top: 5rem;
+        background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for better contrast */
+        padding: 2rem; /* Padding for inner spacing */
+        border-radius: 0.5rem; /* Rounded corners */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        z-index: 1; /* Ensure the container is above the blurred background */
     }
     h2 {
         color: #007bff;
@@ -130,7 +156,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         margin-top: 2rem;
         text-align: center;
         font-size: 0.9rem;
-        color: #6c757d;
+        color: #000;
+        position: relative;
+    }
+    .footer p{
+        color: #000;
     }
 </style>
 </head>
@@ -164,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="footer">
-        &copy; <?= date("Y") ?> <?= htmlspecialchars(SITE_NAME) ?>. All rights reserved.
+        <p>&copy; <?= date("Y") ?> <?= htmlspecialchars(SITE_NAME) ?>. All rights reserved.</p>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,0 +1,5 @@
+# Ignore database configuration
+# /main/configs/db.php
+
+# Other ignored files or directories
+# Add any other rules you want to ignore below this line
