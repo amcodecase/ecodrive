@@ -2,8 +2,8 @@
 // Database configuration
 $host = 'localhost'; // Change to your database host
 $db   = 'ecodrive'; // Change to your database name
-$user = 'main'; // Change to your database username
-$pass = 'main'; // Change to your database password
+$user = 'bc'; // Change to your database username
+$pass = 'Tasheni'; // Change to your database password
 $charset = 'utf8mb4';
 
 // Set up the Data Source Name (DSN)
@@ -17,6 +17,7 @@ $options = [
 try {
     // Create a new PDO instance
     $pdo = new PDO($dsn, $user, $pass, $options);
+    echo "Database connection successful!"; // For testing purposes
 } catch (\PDOException $e) {
     // Handle connection errors
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
