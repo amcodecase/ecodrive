@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 // After validating the user's credentials
-
+require "loader.html";
 
 session_start();
 include 'configs/db.php';
