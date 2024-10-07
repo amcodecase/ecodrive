@@ -20,7 +20,7 @@ if (isset($_SESSION['user_id'])) {
             header("Location: /ecodrive/toll_assistant/dashboard.php");
             exit();
         case 'driver':
-            header("Location: /ecodrive/driver/dashboard.php");
+            header("Location: driver/dashboard.php");
             exit();
         case 'police':
             header("Location: /ecodrive/police/dashboard.php");
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: /ecodrive/toll_assistant/dashboard.php");
                 exit();
             case 'driver':
-                header("Location: /ecodrive/driver/dashboard.php");
+                header("Location: driver/dashboard.php");
                 exit();
             case 'police':
                 header("Location: /ecodrive/police/dashboard.php");

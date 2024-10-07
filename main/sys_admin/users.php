@@ -10,21 +10,40 @@ $site_name = SITE_NAME;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
-require '../../vendor/autoload.php'; // Ensure PHPMailer is included
+require '../../vendor/autoload.php'; // Ensure PHPMailer and QR code libraries are included
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addUser'])) {
+    $first_name = htmlspecialchars($_POST['first_name']);
+    $last_name = htmlspecialchars($_POST['last_name']);
     $email = htmlspecialchars($_POST['email']);
     $role = htmlspecialchars($_POST['role']);
     $generated_password = substr(md5(rand()), 0, 4); // Generate a random 4-character password
     $hashed_password = md5($generated_password); // Hash the password
 
-    // Insert the user into the database
-    $query = "INSERT INTO users (email, password, role) VALUES (:email, :password, :role)";
+    // Generate QR Code
+    $qrContent = "{$first_name} {$last_name}";
+    $qrCode = new QrCode($qrContent);
+    $qrCode->setSize(300);
+    $qrCode->setMargin(10);
+
+    // Convert QR code to base64 string
+    $writer = new PngWriter();
+    $qrCodeResult = $writer->write($qrCode);
+    $qrCodeData = $qrCodeResult->getString();
+    $qrCodeBase64 = base64_encode($qrCodeData);
+
+    // Insert the user into the database with QR code
+    $query = "INSERT INTO users (first_name, last_name, email, password, role, qr_code) VALUES (:first_name, :last_name, :email, :password, :role, :qr_code)";
     $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':first_name', $first_name);
+    $stmt->bindParam(':last_name', $last_name);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':password', $hashed_password);
     $stmt->bindParam(':role', $role);
+    $stmt->bindParam(':qr_code', $qrCodeBase64);
 
     if ($stmt->execute()) {
         // Send email using PHPMailer
@@ -48,11 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addUser'])) {
             $mail->isHTML(true);
             $mail->Subject = "Your new account at $site_name";
             $mail->Body    = "
-                <p>Dear User,</p>
+                <p>Dear {$first_name} {$last_name},</p>
                 <p>Your account has been created successfully. Here are your login details:</p>
                 <p>Email: {$email}</p>
                 <p>Password: {$generated_password}</p>
-                <p>Please log in and change your password immediately.</p>
                 <p>Regards,<br>$site_name Team</p>";
 
             $mail->send();
@@ -68,13 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addUser'])) {
 // Fetch all users from the database
 $query = "SELECT * FROM users";
 $stmt = $pdo->query($query);
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all users at once
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch unique roles from the database
 $query = "SELECT DISTINCT role FROM users";
 $stmt = $pdo->query($query);
-$roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
+$roles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 ?>
+
 
 <!-- Your HTML code to display users or other information -->
 <!DOCTYPE html>
@@ -97,7 +116,7 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
             border-radius: 10px;
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin: 300px; /* Center the container */
+            margin: 300px;
         }
 
         .table {
@@ -129,20 +148,18 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
 <?php include 'sidebar.php'; ?>
 
 <div class="m-container mt-5">
-    <!-- <h2>Manage Users</h2> -->
-
-    <!-- Button to Open the Add User Modal -->
     <button type="button" class="btn btn-primary m-4" data-toggle="modal" data-target="#addUserModal">
         Add New User
     </button>
 
-    <!-- Live search input -->
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search users by email or role..." onkeyup="filterTable()">
 
     <table class="table table-striped" id="usersTable">
         <thead>
             <tr>
                 <th>SN</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Created At</th>
@@ -155,6 +172,8 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
                 foreach ($users as $row) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['first_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['role']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
@@ -165,7 +184,7 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='5'>No users found</td></tr>";
+                echo "<tr><td colspan='7'>No users found</td></tr>";
             }
             ?>
         </tbody>
@@ -184,6 +203,14 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
       </div>
       <div class="modal-body">
         <form id="addUserForm" action="users.php" method="POST">
+          <div class="form-group">
+            <label for="userFirstName">First Name</label>
+            <input type="text" class="form-control" id="userFirstName" name="first_name" required>
+          </div>
+          <div class="form-group">
+            <label for="userLastName">Last Name</label>
+            <input type="text" class="form-control" id="userLastName" name="last_name" required>
+          </div>
           <div class="form-group">
             <label for="userEmail">Email</label>
             <input type="email" class="form-control" id="userEmail" name="email" required>
@@ -206,33 +233,30 @@ $roles = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch roles as an array
   </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Live search script -->
 <script>
 function filterTable() {
-    var input, filter, table, tr, td, i, j, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toLowerCase();
-    table = document.getElementById("usersTable");
-    tr = table.getElementsByTagName("tr");
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toLowerCase();
+    let table = document.getElementById("usersTable");
+    let tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header
-        tr[i].style.display = "none"; // Hide all rows initially
-        td = tr[i].getElementsByTagName("td");
-        for (j = 0; j < td.length; j++) {
-            if (td[j]) {
-                txtValue = td[j].textContent || td[j].innerText;
-                if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    tr[i].style.display = ""; // Show the row if there's a match
-                    break; // Stop searching in this row
-                }
+    for (let i = 1; i < tr.length; i++) {
+        let tdEmail = tr[i].getElementsByTagName("td")[2];
+        let tdRole = tr[i].getElementsByTagName("td")[4];
+        if (tdEmail || tdRole) {
+            let emailValue = tdEmail.textContent || tdEmail.innerText;
+            let roleValue = tdRole.textContent || tdRole.innerText;
+            if (emailValue.toLowerCase().indexOf(filter) > -1 || roleValue.toLowerCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
             }
         }
     }
 }
 </script>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
